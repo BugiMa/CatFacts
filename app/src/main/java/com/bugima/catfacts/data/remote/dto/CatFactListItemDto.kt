@@ -1,6 +1,6 @@
 package com.bugima.catfacts.data.remote.dto
 
-data class CatFactDto(
+data class CatFactListItemDto(
     val __v: Int,
     val _id: String,
     val createdAt: String,

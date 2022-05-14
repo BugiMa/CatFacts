@@ -1,7 +1,6 @@
 package com.bugima.catfacts.util
 
-class Constants {
-    companion object {
-        const val BASE_URL = "https://cat-fact.herokuapp.com"
-    }
+object Constants {
+    const val BASE_URL = "https://cat-fact.herokuapp.com/"
+    const val FETCHED_FACTS_COUNT = 30
 }

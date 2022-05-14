@@ -1,7 +1,7 @@
 package com.bugima.catfacts.di
 
 import com.bugima.catfacts.data.remote.CatFactsApi
-import com.bugima.catfacts.util.Constants.Companion.BASE_URL
+import com.bugima.catfacts.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

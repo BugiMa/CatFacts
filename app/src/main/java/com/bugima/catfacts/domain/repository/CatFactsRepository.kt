@@ -1,16 +1,16 @@
 package com.bugima.catfacts.domain.repository
 
-import com.bugima.catfacts.domain.model.CatFact
-import com.bugima.catfacts.util.Resource
-import kotlinx.coroutines.flow.Flow
+import com.bugima.catfacts.data.remote.dto.CatFactDetailsDto
+import com.bugima.catfacts.data.remote.dto.CatFactListItemDto
+import retrofit2.Response
 
 interface CatFactsRepository {
 
     suspend fun getCatFacts(
         amount: Int = 30
-    ): Flow<Resource<List<CatFact>>>
+    ): Response<List<CatFactListItemDto>>
 
     suspend fun getCatFactById(
         id: String
-    ): Flow<Resource<CatFact>>
+    ): Response<CatFactDetailsDto>
 }

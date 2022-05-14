@@ -1,18 +1,20 @@
 package com.bugima.catfacts.data.remote
 
-import com.bugima.catfacts.data.remote.dto.CatFactDto
+import com.bugima.catfacts.data.remote.dto.CatFactDetailsDto
+import com.bugima.catfacts.data.remote.dto.CatFactListItemDto
 import retrofit2.Response
 import retrofit2.http.*
 
+
 interface CatFactsApi {
 
-    @GET("/facts/random")
+    @GET("facts/random")
     suspend fun getFacts(
         @Query("amount") amount: Int
-    ):Response<List<CatFactDto>>
+    ):Response<List<CatFactListItemDto>>
 
-    @GET("/facts/{id}")
+    @GET("facts/{id}")
     suspend fun getFactById(
         @Path("id") id: String
-    ):Response<CatFactDto>
+    ):Response<CatFactDetailsDto>
 }
