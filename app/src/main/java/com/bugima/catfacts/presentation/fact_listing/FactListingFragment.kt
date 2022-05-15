@@ -12,12 +12,13 @@ import com.bugima.catfacts.presentation.MainActivity
 import com.bugima.catfacts.R
 import com.bugima.catfacts.databinding.FragmentFactListingBinding
 import com.bugima.catfacts.util.Resource
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class FactListingFragment : Fragment() {
 
-    private lateinit var factListingViewModel: FactListingViewModel
+    private lateinit var factListingViewModelImpl: FactListingViewModelImpl
 
     private var _binding: FragmentFactListingBinding? = null
     private val binding get() = _binding!!
@@ -27,6 +28,8 @@ class FactListingFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFactListingBinding.inflate(inflater, container, false)
+        factListingViewModelImpl = ViewModelProvider(requireActivity())[FactListingViewModelImpl::class.java]
+        factListingViewModelImpl.loadFacts()
         return binding.root
     }
 
@@ -35,8 +38,6 @@ class FactListingFragment : Fragment() {
 
         (requireActivity() as MainActivity).supportActionBar?.title = getString(R.string.app_name)
 
-        factListingViewModel = ViewModelProvider(requireActivity())[FactListingViewModel::class.java]
-
         val factListingRecyclerViewAdapter = FactListingRecyclerViewAdapter(emptyList())
 
         binding.factRecyclerView.apply {
@@ -44,7 +45,7 @@ class FactListingFragment : Fragment() {
             adapter = factListingRecyclerViewAdapter
         }
 
-        factListingViewModel.facts.observe(viewLifecycleOwner) { resource ->
+        factListingViewModelImpl.facts.observe(viewLifecycleOwner) { resource ->
             when (resource) {
                 is Resource.Success -> {
                     binding.progressBar.visibility = View.GONE
@@ -52,7 +53,7 @@ class FactListingFragment : Fragment() {
                 }
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
-                    Toast.makeText(requireActivity(), "Error: ${resource.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(), getString(R.string.error_toast, resource.message), Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
@@ -61,8 +62,8 @@ class FactListingFragment : Fragment() {
         }
 
         binding.refreshFab.setOnClickListener {
-            factListingViewModel.loadFacts()
-            Toast.makeText(requireActivity(),"Loading more facts", Toast.LENGTH_SHORT).show()
+            factListingViewModelImpl.loadFacts()
+            Toast.makeText(requireActivity(),getString(R.string.loading_more_facts), Toast.LENGTH_SHORT).show()
         }
     }
 

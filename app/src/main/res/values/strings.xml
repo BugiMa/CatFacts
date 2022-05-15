@@ -3,4 +3,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="cat_icon_content_description">cat icon</string>
     <string name="refresh_fab_content_description">refresh FAB</string>
+    <string name="loading_more_facts">Loading more facts…</string>
+    <string name="error_toast">Error: %1$s</string>
 </resources>

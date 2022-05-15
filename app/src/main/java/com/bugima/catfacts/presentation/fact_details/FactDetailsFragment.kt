@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
+import com.bugima.catfacts.R
 import com.bugima.catfacts.presentation.MainActivity
 import com.bugima.catfacts.databinding.FragmentFactDetailsBinding
 import com.bugima.catfacts.util.Resource
@@ -16,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class FactDetailsFragment : Fragment() {
 
-    private lateinit var factDetailsViewModel: FactDetailsViewModel
+    private lateinit var factDetailsViewModelImpl: FactDetailsViewModelImpl
 
     private var _binding: FragmentFactDetailsBinding? = null
     private val binding get() = _binding!!
@@ -28,15 +29,15 @@ class FactDetailsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentFactDetailsBinding.inflate(inflater, container, false)
+        factDetailsViewModelImpl = ViewModelProvider(requireActivity())[FactDetailsViewModelImpl::class.java]
+        factDetailsViewModelImpl.loadFact(args.factId)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        factDetailsViewModel = ViewModelProvider(requireActivity())[FactDetailsViewModel::class.java]
-        factDetailsViewModel.loadFact(args.factId)
-        factDetailsViewModel.fact.observe(viewLifecycleOwner) {
+        factDetailsViewModelImpl.fact.observe(viewLifecycleOwner) {
                 resource ->
             when (resource) {
                 is Resource.Success -> {
@@ -50,7 +51,7 @@ class FactDetailsFragment : Fragment() {
                 is Resource.Error -> {
                     binding.progressBar.visibility = View.GONE
                     binding.factCard.visibility = View.GONE
-                    Toast.makeText(requireActivity(), "Error: ${resource.error.toString()}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(requireActivity(), getString(R.string.error_toast, resource.message), Toast.LENGTH_LONG).show()
                 }
                 is Resource.Loading -> {
                     binding.progressBar.visibility = View.VISIBLE
